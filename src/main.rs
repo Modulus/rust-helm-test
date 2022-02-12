@@ -50,21 +50,26 @@ impl ChartInfo {
         let mut data: Vec<ChartInfo> = Vec::new();
 
         for line in lines {
-            println!("CURRENT LINT");
             println!("{}", line);
-            let elements = line.split("\t");
+            let elements : Vec<&str> = line.split("\t").collect();
 
-            for element in elements {
-                println!("{:?}", element);
+            if elements.len() >= 4 {
+                println!("Length is there!");
+
                 let chart_info = ChartInfo{
-                    name: String::from(""),
-                    chart_version: String::from(""),
-                    app_version: String::from(""),
-                    description: String::from("")
+                    name: String::from(elements[0].trim()),
+                    chart_version: String::from(elements[1].trim()),
+                    app_version: String::from(elements[2].trim()),
+                    description: String::from(elements[3].trim())
                 };
         
                 data.push(chart_info);
-            }
+            }  
+            else {
+                println!("Failed to insert element: {:?}", elements)
+            }          
+     
+          
         }
 
      
@@ -78,17 +83,18 @@ mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
     #[test]
-    fn test_add() {
+    fn test_extract() {
 
-        let output =    r#"NAME                                    CHART VERSION   APP VERSION     DESCRIPTION                                       
-                            bitnami/nginx                           9.7.6            1.21.6               NGINX Open Source is a web server that can be a...
-                            bitnami/nginx-ingress-controller            9.1.5              1.1.1               NGINX Ingress Controller is an Ingress controll...
-                            bitnami/nginx-intel                      0.1.2             0.4.7               NGINX Open Source for Intel is a lightweight se...
-                            bitnami/kong                                5.0.2              2.7.0               Kong is a scalable, open source API layer (aka ..."#;
+        let output =   "NAME                                    CHART VERSION   APP VERSION     DESCRIPTION       \n                             
+                            bitnami/nginx\t                           9.7.6\t            1.21.6\t               NGINX Open Source is a web server that can be a...\n\
+                            bitnami/nginx-ingress-controller\t        9.1.5\t            1.1.1\t               NGINX Ingress Controller is an Ingress controll...\n\
+                            bitnami/nginx-intel\t                     0.1.2\t            0.4.7\t               NGINX Open Source for Intel is a lightweight se...\n\
+                            bitnami/kong\t                            5.0.2\t            2.7.0\t               Kong is a scalable, open source API layer (aka ...\n";
     
         let chart_info = ChartInfo::extract(output);
         assert!(chart_info.len() > 0);
-        assert!(chart_info.len() == 4);
+        assert!(chart_info.len() >= 4);
+
     }
 
   
