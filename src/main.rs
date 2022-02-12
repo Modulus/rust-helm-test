@@ -26,7 +26,7 @@ fn main() {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChartInfo {
     pub name: String,
     pub chart_version: String,
@@ -94,6 +94,46 @@ mod tests {
         let chart_info = ChartInfo::extract(output);
         assert!(chart_info.len() > 0);
         assert!(chart_info.len() >= 4);
+
+
+
+ 
+        assert_eq!(chart_info.iter().filter(|e| e.name == "bitnami/nginx").count(), 1);
+        let filtered_vec : Vec<ChartInfo> = chart_info.clone().into_iter().filter(|e| e.name == "bitnami/nginx").collect();
+        let element = &filtered_vec[0];
+        assert!(element.name == "bitnami/nginx"); 
+        assert!(element.chart_version == "9.7.6"); 
+        assert!(element.app_version == "1.21.6"); 
+        assert!(element.description == "NGINX Open Source is a web server that can be a..."); 
+
+
+
+
+        assert_eq!(chart_info.iter().filter(|e| e.name == "bitnami/nginx-ingress-controller").count(), 1);
+        let filtered_vec : Vec<ChartInfo> = chart_info.clone().into_iter().filter(|e| e.name == "bitnami/nginx-ingress-controller").collect();
+        let element = &filtered_vec[0];
+        assert!(element.name == "bitnami/nginx-ingress-controller"); 
+        assert!(element.chart_version == "9.1.5"); 
+        assert!(element.app_version == "1.1.1"); 
+        assert!(element.description == "NGINX Ingress Controller is an Ingress controll..."); 
+
+        assert_eq!(chart_info.iter().filter(|e| e.name == "bitnami/nginx-intel").count(), 1);
+        let filtered_vec : Vec<ChartInfo> = chart_info.clone().into_iter().filter(|e| e.name == "bitnami/nginx-intel").collect();
+        let element = &filtered_vec[0];
+        assert!(element.name == "bitnami/nginx-intel"); 
+        assert!(element.chart_version == "0.1.2"); 
+        assert!(element.app_version == "0.4.7"); 
+        assert!(element.description == "NGINX Open Source for Intel is a lightweight se..."); 
+        
+        assert_eq!(chart_info.iter().filter(|e| e.name == "bitnami/kong").count(), 1);
+        let filtered_vec : Vec<ChartInfo> = chart_info.clone().into_iter().filter(|e| e.name == "bitnami/kong").collect();
+        let element = &filtered_vec[0];
+        assert!(element.name == "bitnami/kong"); 
+        assert!(element.chart_version == "5.0.2"); 
+        assert!(element.app_version == "2.7.0"); 
+        assert!(element.description == "Kong is a scalable, open source API layer (aka ..."); 
+
+        assert_eq!(chart_info.iter().filter(|e| e.name.contains("bitnami") ).count(), 4);
 
     }
 
