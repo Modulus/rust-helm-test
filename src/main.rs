@@ -1,7 +1,6 @@
 use std::borrow::Borrow;
 use std::fmt::{Display, Debug};
-use std::process::Output;
-use std::{process::Command, any::Any, str};
+use std::{process::Command, str};
 fn main() {
     let result = Command::new("sh")
     .arg("-c")
@@ -12,7 +11,7 @@ fn main() {
     match result {
         Ok(output) => {
             println!("Status: {:?}", output.status.code());
-            let s = match str::from_utf8(output.stdout.borrow()) {
+            match str::from_utf8(output.stdout.borrow()) {
                 Ok(v) => {
                     let data = ChartInfo::extract(v);
                     println!("{:?}", data);
@@ -54,7 +53,7 @@ impl ChartInfo {
             let elements : Vec<&str> = line.split("\t").collect();
 
             if elements.len() >= 4 {
-                println!("Length is there!");
+                println!("Length is correct, adding element!");
 
                 let chart_info = ChartInfo{
                     name: String::from(elements[0].trim()),
@@ -68,12 +67,7 @@ impl ChartInfo {
             else {
                 println!("Failed to insert element: {:?}", elements)
             }          
-     
-          
         }
-
-     
-
         return data;
     }
 }
