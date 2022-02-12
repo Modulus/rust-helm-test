@@ -6,3 +6,19 @@ services:
       dockerfile: Dockerfile
       args:
         buildno: 1
+    networks:
+      - rust-helm-network
+  db:
+    image: postgres:14.2
+    networks:
+      - rust-helm-network
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=app
+      - POSTGRES_USER=app
+      - POSTGRES_DB=helm
+
+networks:
+   rust-helm-network:
+    driver: bridge
